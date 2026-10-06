@@ -19,7 +19,8 @@
   },
   "files": [
     "bin/strata-models",
-    "assets/preview-widget.png"
+    "assets/preview-widget.png",
+    "assets/preview-panel.png"
   ],
   "capabilities": {
     "densities": [
