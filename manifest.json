@@ -1,6 +1,6 @@
 {
   "id": "strata",
-  "name": "Strata",
+  "name": "Local LLM Manager",
   "version": "0.4.0",
   "author": "guyb <blumguy111@gmail.com>",
   "description": "Pick a local model and start or stop it from the bar. Finds Strata, TabbyAPI and llama.cpp engines and their models, one port per model.",
@@ -19,8 +19,7 @@
   },
   "files": [
     "bin/strata-models",
-    "assets/preview-widget.png",
-    "assets/preview-panel.png"
+    "assets/preview-widget.png"
   ],
   "capabilities": {
     "densities": [
@@ -33,7 +32,7 @@
   },
   "defaults": {
     "host": "topbarGlyph",
-    "label": "Strata"
+    "label": "Local LLM Manager"
   },
   "dependencies": {
     "commands": [

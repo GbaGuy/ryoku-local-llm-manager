@@ -1,4 +1,4 @@
-# Strata
+# Local LLM Manager
 
 Bar widget for local model servers. It finds every installed engine and its ready models by itself,
 runs one model at a time, and gives each model its own port.
@@ -17,7 +17,7 @@ runs one model at a time, and gives each model its own port.
 A model with no fixed port gets the next free one from 8081 (skipping ports in use) the first time it
 is seen, kept in `ports` under the state dir so it never changes.
 
-## Settings (QS Bar Settings > Community > Strata, group "Paths")
+## Settings (QS Bar Settings > Community > Local LLM Manager, group "Paths")
 
 | Setting | Default |
 |---|---|
