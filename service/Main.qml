@@ -11,28 +11,33 @@ Item {
     property var pluginApi
     readonly property string bin: pluginApi ? pluginApi.pluginDir + "/bin/strata-models" : ""
     readonly property string stateDir: pluginApi ? pluginApi.stateDir : ""
+    readonly property var settings: pluginApi && pluginApi.pluginSettings ? pluginApi.pluginSettings : ({})
+    // where the script looks for engines and models (the manifest's Paths settings)
+    readonly property var env: ({
+        STRATA_DIR: settings.strataDir || "~/Strata",
+        TABBY_DIR: settings.tabbyDir || "~/tabbyAPI",
+        GGUF_DIRS: settings.ggufDirs || "~/models"
+    })
+    onEnvChanged: refresh()
 
     property var models: []            // [{ key, engine, label, port, unit }]
     property string current: ""        // selected model key, "engine:name"
     property string state: "unknown"   // the "most active" systemctl is-active result across units
     property var unitStates: ({})      // unit -> systemctl is-active result
     readonly property var engines: models.reduce((a, m) => a.includes(m.engine) ? a : a.concat([m.engine]), [])
-    readonly property var units: {
-        const u = models.reduce((a, m) => a.includes(m.unit) ? a : a.concat([m.unit]), []);
-        return u.length ? u : ["strata.service"];
-    }
+    readonly property var units: ["strata-model.service"]   // the one transient unit the script runs
     readonly property var selected: models.find(m => m.key === current) || null
     readonly property bool running: state === "active"
     readonly property bool busy: state === "activating" || state === "deactivating" || ctl.running
 
-    // the running model: the selected one, while its engine's unit is up (starts always go through it)
+    // the running model: the selected one, while the unit is up (starts always go through it)
     function isRunning(key) {
         const m = svc.models.find(x => x.key === key);
         return !!m && key === svc.current && svc.unitStates[m.unit] === "active";
     }
     function engineState(engine) {
-        const m = svc.models.find(x => x.engine === engine);
-        return m ? (svc.unitStates[m.unit] || "unknown") : "unknown";
+        return svc.selected && svc.selected.engine === engine
+            ? (svc.unitStates[svc.selected.unit] || "unknown") : "inactive";
     }
 
     function refresh() {
@@ -79,6 +84,7 @@ Item {
     Process {
         id: list
         command: [svc.bin, "list", svc.stateDir]
+        environment: svc.env
         stdout: StdioCollector {
             onStreamFinished: svc.models = this.text.split("\n").filter(l => l.length).map(l => {
                 const f = l.split("\t");
@@ -89,10 +95,12 @@ Item {
     Process {
         id: cur
         command: [svc.bin, "current", svc.stateDir]
+        environment: svc.env
         stdout: StdioCollector { onStreamFinished: svc.current = this.text.trim() }
     }
     Process {
         id: ctl
+        environment: svc.env
         onExited: svc.refresh()
     }
     Timer {

@@ -38,6 +38,7 @@ Item {
             }
             // status dot, bottom-right of the icon
             Rectangle {
+                id: dot
                 width: 6 * root.s
                 height: 6 * root.s
                 radius: width / 2
@@ -50,7 +51,7 @@ Item {
                 SequentialAnimation on opacity {
                     running: root.busy
                     loops: Animation.Infinite
-                    onRunningChanged: if (!running) parent.opacity = 1
+                    onRunningChanged: if (!running) dot.opacity = 1
                     NumberAnimation { to: 0.25; duration: Motion.pulse }
                     NumberAnimation { to: 1; duration: Motion.pulse }
                 }
