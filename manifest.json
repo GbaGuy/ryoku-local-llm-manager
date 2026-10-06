@@ -3,7 +3,7 @@
   "name": "Strata",
   "version": "0.4.0",
   "author": "guyb <blumguy111@gmail.com>",
-  "description": "Finds local model engines (Strata, TabbyAPI, llama.cpp) and their models; pick one, start or stop it.",
+  "description": "Pick a local model and start or stop it from the bar. Finds Strata, TabbyAPI and llama.cpp engines and their models, one port per model.",
   "license": "MIT",
   "official": false,
   "hosts": [
@@ -18,7 +18,8 @@
     "width": 360
   },
   "files": [
-    "bin/strata-models"
+    "bin/strata-models",
+    "assets/preview-widget.png"
   ],
   "capabilities": {
     "densities": [
